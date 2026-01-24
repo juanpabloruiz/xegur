@@ -1,4 +1,5 @@
-<?php require_once 'conexion.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php'; ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -53,7 +54,8 @@
                     <!-- USUARIOS -->
                     <div class="tab-pane fade" id="usuarios">
                         <div class="row g-3" id="lista-usuarios">
-                            <?php include 'usuarios/index.php'; ?>
+                            <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/usuarios/index.php' ?>
+
                         </div>
                     </div>
 
