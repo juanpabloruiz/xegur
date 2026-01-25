@@ -11,7 +11,7 @@ if (isset($_GET['edit'])):
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
     if (!$row):
-        header('Location: perfiles.php');
+        header('Location: roles.php');
         exit;
     endif;
 
@@ -66,7 +66,7 @@ if (isset($_POST['insert'])):
     $stmt->bind_param('s', $title);
     $stmt->execute();
     $stmt->close();
-    header('Location: perfiles.php');
+    header('Location: roles.php');
     exit;
 endif;
 
@@ -78,7 +78,7 @@ if (isset($_POST['update'])):
     $stmt->bind_param('si', $title, $id);
     $stmt->execute();
     $stmt->close();
-    header('Location: perfiles.php');
+    header('Location: roles.php');
     exit;
 endif;
 
