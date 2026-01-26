@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-// Show bugs
+// Mostrar errores
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Change names of host
-$conn = new mysqli('localhost', 'user', 'password', 'db');
-$conn->set_charset('utf8mb4');
+// Cambiar datos del servidor
+$conexion = new mysqli('localhost', 'usuario', 'contraseña', 'base_de_datos');
+$conexion->set_charset('utf8mb4');
