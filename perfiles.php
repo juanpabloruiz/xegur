@@ -25,15 +25,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="perfiles.php">Perfiles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="users.php">Usuarios</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="perfiles.php">Perfiles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="users.php">Usuarios</a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -57,7 +52,7 @@
 
         ?>
 
-            <!-- Form Edit -->
+            <!-- Formulario de edición -->
             <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
                 <input type="hidden" name="id" value="<?= $campo['id'] ?>">
                 <input type="text" name="titulo" class="form-control" value="<?= $campo['titulo'] ?>">
@@ -67,7 +62,7 @@
 
         <?php else: ?>
 
-            <!-- Form Insert -->
+            <!-- Formulario de inserción -->
             <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
                 <input type="text" name="titulo" class="form-control" placeholder="Perfil">
                 <input type="text" name="descripcion" class="form-control" placeholder="Descripción...">
@@ -76,7 +71,7 @@
 
         <?php endif ?>
 
-        <!-- Table to display records -->
+        <!-- Tabla para mostrar registros -->
         <div class="table-responsive">
 
             <table class="table table-hover">
@@ -128,7 +123,7 @@ if (isset($_POST['insertar'])):
     $titulo = $_POST['titulo'];
     $descripcion = $_POST['descripcion'];
     $sentencia = $conexion->prepare("INSERT INTO perfiles (titulo, descripcion) VALUES (?, ?)");
-    $sentencia->bind_param('ss', $titulo, $content);
+    $sentencia->bind_param('ss', $titulo, $descripcion);
     $sentencia->execute();
     $sentencia->close();
     echo '<script>window.location="perfiles.php"</script>';
@@ -148,7 +143,7 @@ if (isset($_POST['actualizar'])):
     exit;
 endif;
 
-// Delete registro
+// Eliminar registro
 if (isset($_GET['eliminar'])):
     $id = (int) $_GET['eliminar'];
     $sentencia = $conexion->prepare("DELETE FROM perfiles WHERE id = ?");
