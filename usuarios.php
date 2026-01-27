@@ -64,8 +64,24 @@
 
             <!-- Formulario de inserción -->
             <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
-                <input type="text" name="titulo" class="form-control" placeholder="Perfil">
-                <input type="text" name="descripcion" class="form-control" placeholder="Descripción...">
+                <input type="text" name="apellidos" class="form-control" placeholder="Apellidos">
+                <input type="text" name="Nombres" class="form-control" placeholder="Nombres">
+                <input type="text" name="correo" class="form-control" placeholder="Correo electrónico">
+                <input type="text" name="clave" class="form-control" placeholder="Contraseña">
+                
+                <select name="id_perfil" id="id_perfil" class="form-select" required>
+                    <option value="" disabled selected>Seleccionar perfil</option>
+                    <?php
+                    $consulta = $conexion->query("SELECT id, titulo FROM perfiles ORDER BY titulo");
+                    while ($campo = $consulta->fetch_assoc()):
+                    ?>
+                    
+                        <option value="<?= $campo['id'] ?>"><?= htmlspecialchars($campo['titulo']) ?></option>
+                    
+                    <?php endwhile ?>
+
+                </select>
+
                 <input type="submit" name="insertar" value="Insertar" class="btn btn-primary">
             </form>
 
