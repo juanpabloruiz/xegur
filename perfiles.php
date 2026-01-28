@@ -97,7 +97,7 @@ endif;
             </thead>
 
             <?php
-            $consulta = $conexion->query("SELECT * FROM perfiles");
+            $consulta = $conexion->query("SELECT p.id, p.titulo, p.agregado, p.modificado, COUNT(u.id) AS total_usuarios FROM perfiles p LEFT JOIN usuarios u ON u.id_perfil = p.id GROUP BY p.id, p.titulo");
             while ($campo = $consulta->fetch_assoc()):
             ?>
 
@@ -125,13 +125,18 @@ endif;
                         </td>
 
                         <td class="text-center">
-                            <form method="post" style="display:inline">
-                                <input type="hidden" name="eliminar" value="<?= $campo['id'] ?>">
-                                <button type="submit" class="btn btn-link p-0" onclick="return confirm('¿Eliminar este registro?');" title="Eliminar">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </form>
+                            <?php if ($campo['total_usuarios'] == 0): ?>
+                                <form method="post" style="display:inline">
+                                    <input type="hidden" name="eliminar" value="<?= $campo['id'] ?>">
+                                    <button type="submit" class="btn btn-link p-0" onclick="return confirm('¿Eliminar este perfil?');" title="Eliminar">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <i class="fa-solid fa-lock text-secondary" title="No se puede eliminar: hay usuarios asociados"></i>
+                            <?php endif; ?>
                         </td>
+
 
                     </tr>
                 </tbody>

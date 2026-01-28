@@ -23,10 +23,9 @@ if (isset($_POST['actualizar'])):
     $apellidos = $_POST['apellidos'];
     $nombres = $_POST['nombres'];
     $correo = $_POST['correo'];
-    $clave = password_hash($_POST['clave'], PASSWORD_DEFAULT);
     $id_perfil = $_POST['id_perfil'];
-    $sentencia = $conexion->prepare("UPDATE usuarios SET apellidos = ?, nombres = ?, correo = ?, clave = ?, id_perfil = ? WHERE id = ?");
-    $sentencia->bind_param('ssssii', $apellidos, $nombres, $correo, $clave, $id_perfil, $id);
+    $sentencia = $conexion->prepare("UPDATE usuarios SET apellidos = ?, nombres = ?, correo = ?, id_perfil = ? WHERE id = ?");
+    $sentencia->bind_param('sssii', $apellidos, $nombres, $correo, $id_perfil, $id);
     $sentencia->execute();
     $sentencia->close();
     header("Location: usuarios.php");
@@ -56,23 +55,35 @@ endif;
     // Editar registro
     if (isset($_GET['editar'])):
         $id = (int) $_GET['editar'];
-        $sentencia = $conexion->prepare("SELECT * FROM perfiles WHERE id = ?");
+        $sentencia = $conexion->prepare("SELECT * FROM usuarios WHERE id = ?");
         $sentencia->bind_param('i', $id);
         $sentencia->execute();
         $resultado = $sentencia->get_result();
         $campo = $resultado->fetch_assoc();
         if (!$campo):
-            echo '<script>window.location="perfiles.php"</script>';
+            echo '<script>window.location="usuarios.php"</script>';
             exit;
         endif;
 
     ?>
 
         <!-- Formulario de edición -->
+        <?php $perfiles = $conexion->query("SELECT id, titulo FROM perfiles"); ?>
         <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
             <input type="hidden" name="id" value="<?= $campo['id'] ?>">
-            <input type="text" name="titulo" class="form-control" value="<?= $campo['titulo'] ?>">
-            <input type="text" name="descripcion" class="form-control" placeholder="Descripción..." value="<?= $campo['descripcion'] ?>">
+            <input type="text" name="apellidos" class="form-control" value="<?= $campo['apellidos'] ?>">
+            <input type="text" name="nombres" class="form-control" value="<?= $campo['nombres'] ?>">
+            <input type="email" name="correo" class="form-control" value="<?= $campo['correo'] ?>">
+
+            <select name="id_perfil" class="form-select">
+                <?php while ($perfil = $perfiles->fetch_assoc()): ?>
+                    <option value="<?= $perfil['id'] ?>"
+                        <?= ($perfil['id'] == $campo['id_perfil']) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($perfil['titulo']) ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
+
             <input type="submit" name="actualizar" value="Actualizar" class="btn btn-primary">
         </form>
 
@@ -82,7 +93,7 @@ endif;
         <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
             <input type="text" name="apellidos" class="form-control" placeholder="Apellidos">
             <input type="text" name="nombres" class="form-control" placeholder="Nombres">
-            <input type="text" name="correo" class="form-control" placeholder="Correo electrónico">
+            <input type="email" name="correo" class="form-control" placeholder="Correo electrónico">
             <input type="password" name="clave" class="form-control" placeholder="Contraseña">
 
             <select name="id_perfil" id="id_perfil" class="form-select" required>
@@ -182,4 +193,4 @@ endif;
 </main>
 
 <!-- Pié de página -->
-<?php require_once 'cabecera.php'; ?>
+<?php require_once 'pie.php'; ?>
