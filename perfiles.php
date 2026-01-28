@@ -43,6 +43,9 @@ endif;
 <!-- Cabecera -->
 <?php require_once 'cabecera.php'; ?>
 
+<!-- Menú -->
+<?php require_once 'menu.php'; ?>
+
 <main class="container my-3">
 
     <?php
