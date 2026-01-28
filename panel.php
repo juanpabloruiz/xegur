@@ -8,7 +8,7 @@
 
 <main class="container-fluid">
     <?php
-    $consulta = $conexion->query("SELECT * FROM ");
+   # $consulta = $conexion->query("SELECT * FROM ");
     ?>
 </main>
 
