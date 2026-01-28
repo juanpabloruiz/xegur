@@ -1,4 +1,3 @@
-<?php require_once 'conexion.php' ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -9,9 +8,9 @@
     <title>Usuarios</title>
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/estilo.css">
-    <link rel="stylesheet" href="fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/estilo.css">
+    <link rel="stylesheet" href="/fontawesome/css/all.min.css">
 
 </head>
 
