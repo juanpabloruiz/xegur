@@ -1,37 +1,4 @@
-<?php require_once 'conexion.php' ?>
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios</title>
-
-    <!-- Estilos -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/estilo.css">
-
-</head>
-
-<body data-bs-theme="dark">
-
-    <!-- Menú -->
-    <nav class="navbar bg-dark navbar-expand-lg border-bottom" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Xegur</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="perfiles.php">Perfiles</a></li>
-                    <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<?php require_once 'cabecera.php'; ?>
 
     <main class="container my-3">
 
@@ -65,19 +32,19 @@
             <!-- Formulario de inserción -->
             <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
                 <input type="text" name="apellidos" class="form-control" placeholder="Apellidos">
-                <input type="text" name="Nombres" class="form-control" placeholder="Nombres">
+                <input type="text" name="nombres" class="form-control" placeholder="Nombres">
                 <input type="text" name="correo" class="form-control" placeholder="Correo electrónico">
-                <input type="text" name="clave" class="form-control" placeholder="Contraseña">
-                
+                <input type="password" name="clave" class="form-control" placeholder="Contraseña">
+
                 <select name="id_perfil" id="id_perfil" class="form-select" required>
                     <option value="" disabled selected>Seleccionar perfil</option>
                     <?php
                     $consulta = $conexion->query("SELECT id, titulo FROM perfiles ORDER BY titulo");
                     while ($campo = $consulta->fetch_assoc()):
                     ?>
-                    
+
                         <option value="<?= $campo['id'] ?>"><?= htmlspecialchars($campo['titulo']) ?></option>
-                    
+
                     <?php endwhile ?>
 
                 </select>
@@ -94,8 +61,9 @@
 
                 <thead>
                     <tr>
-                        <th class="text-center">TÍTULO</th>
-                        <th class="text-center">DESCRIPCIÓN</th>
+                        <th class="text-center">USUARIO</th>
+                        <th class="text-center">CORREO ELECTRÓNICO</th>
+                        <th class="text-center">PERFIL</th>
                         <th class="text-center">AGREGADO</th>
                         <th class="text-center">MODIFICADO</th>
                         <th class="text-center">ELIMINAR</th>
@@ -103,17 +71,39 @@
                 </thead>
 
                 <?php
-                $consulta = $conexion->query("SELECT * FROM usuarios");
+                $consulta = $conexion->query("SELECT * FROM usuarios u LEFT JOIN perfiles p ON u.id_perfil = p.id");
                 while ($campo = $consulta->fetch_assoc()):
                 ?>
 
                     <tbody>
                         <tr>
-                            <td onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= htmlspecialchars($campo['titulo']) ?></td>
-                            <td onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= htmlspecialchars($campo['descripcion'] ?? '') ?></td>
-                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= date('d/m/Y ⏰ H:i', strtotime($campo['agregado'])) ?></td>
-                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= $campo['modificado'] ? date('d/m/Y ⏰ H:i', strtotime($campo['modificado'])) : '—' ?></td>
-                            <td class="text-center"><a href="?eliminar=<?= $campo['id'] ?>" onclick="return confirm('¿Eliminar este registro?');" title="Eliminar">🗑️</a></td>
+                            
+                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;">
+                                <?= htmlspecialchars($campo['apellidos'] . '') ?>, <?= htmlspecialchars($campo['nombres'] ?? '') ?>
+                            </td>
+
+                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= htmlspecialchars($campo['correo'] ?? '') ?></td>
+                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= htmlspecialchars($campo['titulo'] ?? '') ?></td>
+                            
+                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;">
+                                <?= date('d/m/Y', strtotime($campo['agregado'])) ?>
+                                <i class="fa-solid fa-clock"></i>
+                                <?= date('H:i', strtotime($campo['agregado'])) ?>
+                            </td>
+                            
+                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;">
+
+                                <?php if (!empty($campo['modificado'])): ?>
+                                    <?= date('d/m/Y', strtotime($campo['modificado'])) ?>
+                                    <i class="fa-solid fa-clock"></i>
+                                    <?= date('H:i', strtotime($campo['modificado'])) ?>
+                                <?php else: ?>
+                                    —
+                                <?php endif; ?>
+
+                            </td>
+
+                            <td class="text-center"><a href="?eliminar=<?= $campo['id'] ?>" onclick="return confirm('¿Eliminar este registro?');" title="Eliminar"><i class="fa-solid fa-trash"></i></a></td>
                         </tr>
                     </tbody>
 
@@ -136,13 +126,16 @@
 
 // Insertar registro
 if (isset($_POST['insertar'])):
-    $titulo = $_POST['titulo'];
-    $descripcion = $_POST['descripcion'];
-    $sentencia = $conexion->prepare("INSERT INTO perfiles (titulo, descripcion) VALUES (?, ?)");
-    $sentencia->bind_param('ss', $titulo, $descripcion);
+    $apellidos = $_POST['apellidos'];
+    $nombres = $_POST['nombres'];
+    $correo = $_POST['correo'];
+    $clave = password_hash($_POST['clave'], PASSWORD_DEFAULT);
+    $id_perfil = $_POST['id_perfil'];
+    $sentencia = $conexion->prepare("INSERT INTO usuarios (apellidos, nombres, correo, clave, id_perfil) VALUES (?, ?, ?, ?, ?)");
+    $sentencia->bind_param('ssssi', $apellidos, $nombres, $correo, $clave, $id_perfil);
     $sentencia->execute();
     $sentencia->close();
-    echo '<script>window.location="perfiles.php"</script>';
+    echo '<script>window.location="usuarios.php"</script>';
     exit;
 endif;
 

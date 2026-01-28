@@ -1,37 +1,4 @@
-<?php require_once 'conexion.php' ?>
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfiles</title>
-
-    <!-- Estilos -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/estilo.css">
-
-</head>
-
-<body data-bs-theme="dark">
-
-    <!-- Menú -->
-    <nav class="navbar bg-dark navbar-expand-lg border-bottom" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Xegur</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Inicio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="perfiles.php">Perfiles</a></li>
-                    <li class="nav-item"><a class="nav-link" href="usuarios.php">Usuarios</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<?php require_once 'cabecera.php'; ?>
 
     <main class="container my-3">
 
@@ -95,8 +62,25 @@
                         <tr>
                             <td onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= htmlspecialchars($campo['titulo']) ?></td>
                             <td onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= htmlspecialchars($campo['descripcion'] ?? '') ?></td>
-                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= date('d/m/Y ⏰ H:i', strtotime($campo['agregado'])) ?></td>
-                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;"><?= $campo['modificado'] ? date('d/m/Y ⏰ H:i', strtotime($campo['modificado'])) : '—' ?></td>
+
+                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;">
+                                <?= date('d/m/Y', strtotime($campo['agregado'])) ?>
+                                <i class="fa-solid fa-clock"></i>
+                                <?= date('H:i', strtotime($campo['agregado'])) ?>
+                            </td>
+
+                            <td class="text-center" onclick="window.location='?editar=<?= $campo['id'] ?>'" style="cursor: pointer;">
+
+                                <?php if (!empty($campo['modificado'])): ?>
+                                    <?= date('d/m/Y', strtotime($campo['modificado'])) ?>
+                                    <i class="fa-solid fa-clock"></i>
+                                    <?= date('H:i', strtotime($campo['modificado'])) ?>
+                                <?php else: ?>
+                                    —
+                                <?php endif; ?>
+
+                            </td>
+
                             <td class="text-center"><a href="?eliminar=<?= $campo['id'] ?>" onclick="return confirm('¿Eliminar este registro?');" title="Eliminar">🗑️</a></td>
                         </tr>
                     </tbody>
