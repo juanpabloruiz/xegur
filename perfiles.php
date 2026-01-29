@@ -1,13 +1,15 @@
 <?php
 
 require_once 'conexion.php';
+require_once 'funciones.php';
 
 // Insertar registro
 if (isset($_POST['insertar'])):
     $titulo = $_POST['titulo'];
+    $slug = generarSlug($titulo);
     $descripcion = $_POST['descripcion'];
-    $sentencia = $conexion->prepare("INSERT INTO perfiles (titulo, descripcion) VALUES (?, ?)");
-    $sentencia->bind_param('ss', $titulo, $descripcion);
+    $sentencia = $conexion->prepare("INSERT INTO perfiles (titulo, slug, descripcion) VALUES (?, ?)");
+    $sentencia->bind_param('sss', $titulo, $slug, $descripcion);
     $sentencia->execute();
     $sentencia->close();
     header("Location: perfiles.php");
@@ -18,9 +20,10 @@ endif;
 if (isset($_POST['actualizar'])):
     $id = (int) $_POST['id'];
     $titulo = $_POST['titulo'];
+    $slug = generarSlug($titulo);
     $descripcion = $_POST['descripcion'];
-    $sentencia = $conexion->prepare("UPDATE perfiles SET titulo = ?, descripcion = ? WHERE id = ?");
-    $sentencia->bind_param('ssi', $titulo, $descripcion, $id);
+    $sentencia = $conexion->prepare("UPDATE perfiles SET titulo = ?, slug= ?, descripcion = ? WHERE id = ?");
+    $sentencia->bind_param('sssi', $titulo, $slug, $descripcion, $id);
     $sentencia->execute();
     $sentencia->close();
     header("Location: perfiles.php");

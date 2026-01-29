@@ -15,21 +15,21 @@ if (!isset($_SESSION['id_usuario'], $_SESSION['id_perfil'])) {
 }
 
 // ===============================
-// Validar parámetro ID
+// Validar parámetro seccion
 // ===============================
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+if (!isset($_GET['seccion'])) {
     echo "<p>Sección inválida</p>";
     require_once 'pie.php';
     exit;
 }
 
-$idSeccion = (int) $_GET['id'];
+$slug = $_GET['seccion'];
 
 // ===============================
 // Buscar sección (perfil)
 // ===============================
-$sentencia = $conexion->prepare("SELECT id, titulo, publico FROM perfiles WHERE id = ? LIMIT 1");
-$sentencia->bind_param("i", $idSeccion);
+$sentencia = $conexion->prepare("SELECT id, titulo, publico FROM perfiles WHERE slug = ? LIMIT 1");
+$sentencia->bind_param("s", $slug);
 $sentencia->execute();
 $resultado = $sentencia->get_result();
 
@@ -40,6 +40,8 @@ if (!$seccion) {
     require_once 'pie.php';
     exit;
 }
+
+$idSeccion = (int) $seccion['id'];
 
 // ===============================
 // Seguridad por visibilidad
@@ -76,9 +78,9 @@ if (!$esAdmin && $seccion['publico'] == 0) {
             <?php while ($campo = $usuarios->fetch_assoc()): ?>
                 <div class="col-md-2">
                     <div class="card">
-                        <picture class="">
-                            <source srcset="fotos/<?= $campo['foto'] ?>" type="image/webp">
-                            <img src="fotos/<?= $campo['foto'] ?>" class="img-fluid mx-auto d-block w-100" alt="Logotipo">
+                        <picture class="ratio ratio-1x1 rounded overflow-hidden">
+                            <source srcset="/fotos/<?= $campo['foto'] ?>" type="image/webp">
+                            <img src="/fotos/<?= $campo['foto'] ?>" class="img-zoom" alt="Logotipo">
                         </picture>
                         <div class="card-body">
                             <?= htmlspecialchars($campo['apellidos']) ?>
