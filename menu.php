@@ -40,8 +40,10 @@ $resultado = $conexion->query($consulta);
                 <!-- LINKS DINÁMICOS -->
                 <?php while ($campo = $resultado->fetch_assoc()): ?>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($pagina == strtolower($campo['titulo']) . '.php') ? 'active' : '' ?>"
-                            href="<?= strtolower($campo['titulo']) ?>.php">
+                        <a class="nav-link 
+                    <?= ($pagina == 'secciones.php' && isset($_GET['id']) && $_GET['id'] == $campo['id'])
+                        ? 'active' : '' ?>"
+                            href="secciones.php?id=<?= $campo['id'] ?>">
                             <?= $campo['titulo'] ?>
                         </a>
                     </li>
@@ -49,5 +51,6 @@ $resultado = $conexion->query($consulta);
 
             </ul>
         </div>
+
     </div>
 </nav>
