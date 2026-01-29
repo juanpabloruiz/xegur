@@ -56,30 +56,30 @@ if (!$esAdmin && $seccion['publico'] == 0) {
 
 <main class="container-fluid my-3">
 
-<?php
-// ===============================
-// Mostrar título
-// ===============================
-echo "<h1 class='mb-3'>" . htmlspecialchars($seccion['titulo']) . "</h1>";
+    <?php
 
-// ===============================
-// Traer usuarios del perfil
-// ===============================
-$sentencia_usuarios = $conexion->prepare("SELECT id, apellidos, nombres, correo FROM usuarios WHERE id_perfil = ? ORDER BY apellidos, nombres");
-$sentencia_usuarios->bind_param("i", $idSeccion);
-$sentencia_usuarios->execute();
-$usuarios = $sentencia_usuarios->get_result();
+    // ===============================
+    // Traer usuarios del perfil
+    // ===============================
+    $sentencia_usuarios = $conexion->prepare("SELECT id, foto, apellidos, nombres, correo FROM usuarios WHERE id_perfil = ? ORDER BY apellidos, nombres");
+    $sentencia_usuarios->bind_param("i", $idSeccion);
+    $sentencia_usuarios->execute();
+    $usuarios = $sentencia_usuarios->get_result();
 
-// ===============================
-// Mostrar usuarios
-// ===============================
-if ($usuarios->num_rows > 0): ?>
-    
+    // ===============================
+    // Mostrar usuarios
+    // ===============================
+    if ($usuarios->num_rows > 0): ?>
+
 
         <div class="row">
             <?php while ($campo = $usuarios->fetch_assoc()): ?>
                 <div class="col-md-2">
                     <div class="card">
+                        <picture class="">
+                            <source srcset="fotos/<?= $campo['foto'] ?>" type="image/webp">
+                            <img src="fotos/<?= $campo['foto'] ?>" class="img-fluid mx-auto d-block w-100" alt="Logotipo">
+                        </picture>
                         <div class="card-body">
                             <?= htmlspecialchars($campo['apellidos']) ?>
                             <?= htmlspecialchars($campo['nombres']) ?>
@@ -90,7 +90,7 @@ if ($usuarios->num_rows > 0): ?>
             <?php endwhile; ?>
         </div>
 
-    </main>
+</main>
 
 
 
@@ -100,7 +100,7 @@ if ($usuarios->num_rows > 0): ?>
     <p>No hay usuarios cargados en esta sección.</p>
 
 <?php
-endif;
+    endif;
 
 
-require_once 'pie.php';
+    require_once 'pie.php';

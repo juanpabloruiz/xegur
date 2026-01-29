@@ -9,8 +9,22 @@ if (isset($_POST['insertar'])):
     $correo = $_POST['correo'];
     $clave = password_hash($_POST['clave'], PASSWORD_DEFAULT);
     $id_perfil = $_POST['id_perfil'];
-    $sentencia = $conexion->prepare("INSERT INTO usuarios (apellidos, nombres, correo, clave, id_perfil) VALUES (?, ?, ?, ?, ?)");
-    $sentencia->bind_param('ssssi', $apellidos, $nombres, $correo, $clave, $id_perfil);
+
+    $foto = null;
+
+    if (!empty($_FILES['foto']['name'])) {
+
+        $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+        $nombre = md5(uniqid(rand(), true)) . '.' . $ext;
+
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], 'fotos/' . $nombre)) {
+            $foto = $nombre;
+        }
+    }
+
+
+    $sentencia = $conexion->prepare("INSERT INTO usuarios (foto, apellidos, nombres, correo, clave, id_perfil) VALUES (?, ?, ?, ?, ?, ?)");
+    $sentencia->bind_param('sssssi', $foto, $apellidos, $nombres, $correo, $clave, $id_perfil);
     $sentencia->execute();
     $sentencia->close();
     header("Location: usuarios.php");
@@ -24,8 +38,21 @@ if (isset($_POST['actualizar'])):
     $nombres = $_POST['nombres'];
     $correo = $_POST['correo'];
     $id_perfil = $_POST['id_perfil'];
-    $sentencia = $conexion->prepare("UPDATE usuarios SET apellidos = ?, nombres = ?, correo = ?, id_perfil = ? WHERE id = ?");
-    $sentencia->bind_param('sssii', $apellidos, $nombres, $correo, $id_perfil, $id);
+
+    $foto = null;
+
+    if (!empty($_FILES['foto']['name'])) {
+
+        $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+        $nombre = md5(uniqid(rand(), true)) . '.' . $ext;
+
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], 'fotos/' . $nombre)) {
+            $foto = $nombre;
+        }
+    }
+
+    $sentencia = $conexion->prepare("UPDATE usuarios SET foto = COALESCE(?, foto), apellidos = ?, nombres = ?, correo = ?, id_perfil = ? WHERE id = ?");
+    $sentencia->bind_param('ssssii', $foto, $apellidos, $nombres, $correo, $id_perfil, $id);
     $sentencia->execute();
     $sentencia->close();
     header("Location: usuarios.php");
@@ -72,8 +99,9 @@ endif;
 
         <!-- Formulario de edición -->
         <?php $perfiles = $conexion->query("SELECT id, titulo FROM perfiles"); ?>
-        <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
+        <form method="POST" enctype="multipart/form-data" class="d-flex flex-column flex-md-row gap-2 mb-3">
             <input type="hidden" name="id" value="<?= $campo['id'] ?>">
+            <input type="file" name="foto" class="form-control">
             <input type="text" name="apellidos" class="form-control" value="<?= $campo['apellidos'] ?>">
             <input type="text" name="nombres" class="form-control" value="<?= $campo['nombres'] ?>">
             <input type="email" name="correo" class="form-control" value="<?= $campo['correo'] ?>">
@@ -93,7 +121,8 @@ endif;
     <?php else: ?>
 
         <!-- Formulario de inserción -->
-        <form method="POST" class="d-flex flex-column flex-md-row gap-2 mb-3">
+        <form method="POST" enctype="multipart/form-data" class="d-flex flex-column flex-md-row gap-2 mb-3">
+            <input type="file" name="foto" class="form-control" accept="image/*">
             <input type="text" name="apellidos" class="form-control" placeholder="Apellidos">
             <input type="text" name="nombres" class="form-control" placeholder="Nombres">
             <input type="email" name="correo" class="form-control" placeholder="Correo electrónico">
