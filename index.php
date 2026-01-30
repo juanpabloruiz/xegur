@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['id_usuario'] = $campo['id'];
             $_SESSION['id_perfil']  = $campo['id_perfil'];
 
-            header("Location: panel.php");
+            header("Location: panel");
             exit;
         } else {
             $error = "Credenciales incorrectas";

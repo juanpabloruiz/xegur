@@ -27,7 +27,7 @@ if (isset($_POST['insertar'])):
     $sentencia->bind_param('sssssi', $foto, $apellidos, $nombres, $correo, $clave, $id_perfil);
     $sentencia->execute();
     $sentencia->close();
-    header("Location: usuarios.php");
+    header("Location: usuarios");
     exit;
 endif;
 
@@ -55,7 +55,7 @@ if (isset($_POST['actualizar'])):
     $sentencia->bind_param('ssssii', $foto, $apellidos, $nombres, $correo, $id_perfil, $id);
     $sentencia->execute();
     $sentencia->close();
-    header("Location: usuarios.php");
+    header("Location: usuarios");
     exit;
 endif;
 
@@ -66,7 +66,7 @@ if (isset($_POST['eliminar'])):
     $sentencia->bind_param('i', $id);
     $sentencia->execute();
     $sentencia->close();
-    header("Location: usuarios.php");
+    header("Location: usuarios");
     exit;
 endif;
 
@@ -91,7 +91,7 @@ endif;
         $resultado = $sentencia->get_result();
         $campo = $resultado->fetch_assoc();
         if (!$campo):
-            echo '<script>window.location="usuarios.php"</script>';
+            echo '<script>window.location="usuarios"</script>';
             exit;
         endif;
 

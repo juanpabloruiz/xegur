@@ -12,7 +12,7 @@ if (isset($_POST['insertar'])):
     $sentencia->bind_param('sss', $titulo, $slug, $descripcion);
     $sentencia->execute();
     $sentencia->close();
-    header("Location: perfiles.php");
+    header("Location: perfiles");
     exit;
 endif;
 
@@ -26,7 +26,7 @@ if (isset($_POST['actualizar'])):
     $sentencia->bind_param('sssi', $titulo, $slug, $descripcion, $id);
     $sentencia->execute();
     $sentencia->close();
-    header("Location: perfiles.php");
+    header("Location: perfiles");
     exit;
 endif;
 
@@ -37,7 +37,7 @@ if (isset($_POST['eliminar'])):
     $sentencia->bind_param('i', $id);
     $sentencia->execute();
     $sentencia->close();
-    header("Location: perfiles.php");
+    header("Location: perfiles");
     exit;
 endif;
 
@@ -62,7 +62,7 @@ endif;
         $resultado = $sentencia->get_result();
         $campo = $resultado->fetch_assoc();
         if (!$campo):
-            echo '<script>window.location="perfiles.php"</script>';
+            echo '<script>window.location="perfiles"</script>';
             exit;
         endif;
 

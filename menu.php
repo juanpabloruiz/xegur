@@ -29,11 +29,11 @@ $resultado = $conexion->query($consulta);
                 <?php if ($esAdmin): ?>
                     <li class="nav-item">
                         <a class="nav-link <?= ($pagina == '/perfiles.php') ? 'active' : '' ?>"
-                            href="/perfiles.php">Perfiles</a>
+                            href="/perfiles">Perfiles</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?= ($pagina == '/usuarios.php') ? 'active' : '' ?>"
-                            href="/usuarios.php">Usuarios</a>
+                            href="/usuarios">Usuarios</a>
                     </li>
                 <?php endif; ?>
 
