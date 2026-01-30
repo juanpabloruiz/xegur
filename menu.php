@@ -28,26 +28,27 @@ $resultado = $conexion->query($consulta);
                 <!-- LINKS SOLO ADMIN -->
                 <?php if ($esAdmin): ?>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($pagina == 'perfiles.php') ? 'active' : '' ?>"
-                            href="perfiles.php">Perfiles</a>
+                        <a class="nav-link <?= ($pagina == '/perfiles.php') ? 'active' : '' ?>"
+                            href="/perfiles.php">Perfiles</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?= ($pagina == 'usuarios.php') ? 'active' : '' ?>"
-                            href="usuarios.php">Usuarios</a>
+                        <a class="nav-link <?= ($pagina == '/usuarios.php') ? 'active' : '' ?>"
+                            href="/usuarios.php">Usuarios</a>
                     </li>
                 <?php endif; ?>
 
                 <!-- LINKS DINÁMICOS -->
+
+
                 <?php while ($campo = $resultado->fetch_assoc()): ?>
                     <li class="nav-item">
-                        <a class="nav-link 
-                    <?= ($pagina == 'secciones.php' && isset($_GET['id']) && $_GET['id'] == $campo['id'])
-                        ? 'active' : '' ?>"
-                            href="secciones.php?id=<?= $campo['id'] ?>">
-                            <?= $campo['titulo'] ?>
+                        <a class="nav-link <?= ($pagina == 'secciones.php' && isset($_GET['seccion']) && $_GET['seccion'] === $campo['slug']) ? 'active' : '' ?>"
+                            href="/secciones/<?= $campo['slug'] ?>">
+                            <?= htmlspecialchars($campo['titulo']) ?>
                         </a>
                     </li>
                 <?php endwhile; ?>
+
 
             </ul>
         </div>

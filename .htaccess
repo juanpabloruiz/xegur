@@ -1,4 +1,21 @@
 RewriteEngine On
+
+# ==================================
+# 1. SECCIONES (reglas específicas)
+# ==================================
+RewriteRule ^secciones/?$ secciones.php [L,QSA]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^secciones/([a-zA-Z0-9_-]+)/?$ secciones.php?seccion=$1 [L,QSA]
+
+# ==================================
+# 2. ELIMINAR .php y .html (GENÉRICO)
+# ==================================
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L,QSA]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+)$ $1.html [L,QSA]
