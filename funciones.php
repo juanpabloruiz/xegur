@@ -44,7 +44,7 @@ function tituloPagina(): string
         basename($_SERVER['SCRIPT_NAME']) === 'secciones.php'
         && isset($_GET['seccion'])
     ) {
-        return ucfirst($_GET['seccion']);
+        return ucfirst($_GET['seccion']) . ' - Xegur';
     }
 
     // 2️⃣ Páginas fijas
@@ -58,6 +58,6 @@ function tituloPagina(): string
 
     $archivo = basename($_SERVER['SCRIPT_NAME']);
 
-    return $mapa[$archivo] ?? 'Xegur';
+    return $mapa[$archivo] . ' - Xegur' ?? 'Xegur';
 }
 
