@@ -5,7 +5,7 @@ $idPerfil = $_SESSION['id_perfil'];
 $esAdmin  = ($idPerfil == 3);
 
 if ($esAdmin) {
-    $consulta = "SELECT * FROM perfiles ORDER BY titulo";
+    $consulta = "SELECT * FROM perfiles WHERE titulo != 'Administradores' ORDER BY titulo";
 } else {
     $consulta = "SELECT * FROM perfiles WHERE publico = 1 ORDER BY titulo";
 }
@@ -15,7 +15,7 @@ $resultado = $conexion->query($consulta);
 
 <nav class="navbar bg-dark navbar-expand-lg border-bottom" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="panel.php">Xegur</a>
+        <a class="navbar-brand" href="/panel">Xegur</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent">

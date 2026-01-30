@@ -1,6 +1,7 @@
 <?php
 
 require_once 'conexion.php';
+require_once 'funciones.php';
 
 // Insertar registro
 if (isset($_POST['insertar'])):

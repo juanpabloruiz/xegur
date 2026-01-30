@@ -35,3 +35,29 @@ function generarSlug(string $texto): string
 
     return $texto;
 }
+
+// Función para crear títulos dinámicos
+function tituloPagina(): string
+{
+    // 1️⃣ Si estamos en secciones.php con slug válido
+    if (
+        basename($_SERVER['SCRIPT_NAME']) === 'secciones.php'
+        && isset($_GET['seccion'])
+    ) {
+        return ucfirst($_GET['seccion']);
+    }
+
+    // 2️⃣ Páginas fijas
+    $mapa = [
+        'index.php'    => 'Inicio',
+        'panel.php'    => 'Panel',
+        'usuarios.php' => 'Usuarios',
+        'perfiles.php' => 'Perfiles',
+        'login.php'    => 'Iniciar sesión',
+    ];
+
+    $archivo = basename($_SERVER['SCRIPT_NAME']);
+
+    return $mapa[$archivo] ?? 'Xegur';
+}
+

@@ -3,6 +3,7 @@
 // Inicialización
 // ===============================
 require_once 'conexion.php';
+require_once 'funciones.php';
 require_once 'cabecera.php';
 require_once 'menu.php';
 

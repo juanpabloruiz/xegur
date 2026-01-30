@@ -1,6 +1,7 @@
 <?php
 
 require_once 'conexion.php';
+require_once 'funciones.php';
 require_once 'cabecera.php';
 
 $error = null;
