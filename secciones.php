@@ -4,6 +4,11 @@ require_once 'funciones.php';
 require_once 'cabecera.php';
 require_once 'menu.php';
 
+
+
+
+
+
 // ===============================
 // Validar sesión
 // ===============================
@@ -113,24 +118,44 @@ ORDER BY u.apellidos, u.nombres
 
 
                                                     <form method="POST">
-                                                        <input type="hidden" name="entrada" value="E">
-                                                        <input type="submit" name="E" value="Entrada">
+                                                        <input type="hidden" name="id_usuario" value="<?= $campo['id'] ?>">
+
+                                                        <button type="submit"
+                                                            name="registro"
+                                                            value="E"
+                                                            class="btn btn-success btn-sm">
+                                                            Entrada
+                                                        </button>
+
+                                                        <button type="submit"
+                                                            name="registro"
+                                                            value="S"
+                                                            class="btn btn-danger btn-sm">
+                                                            Salida
+                                                        </button>
                                                     </form>
 
-                                                    <form method="POST">
-                                                        <input type="hidden" name="salida" value="S">
-                                                        <input type="submit" name="S" value="Salida">
-                                                    </form>
 
                                                     <?php
-                                                    if (isset($_POST['E'])) {
-                                                        $entrada = $_POST['entrada'];
-                                                        $sentencia = $conexion->prepare("INSERT INTO movimientos (registro, id_usuario) VALUES (?, ?)");
-                                                        $sentencia->bind_param('si', $entrada, $id_usuario);
-                                                        $sentencia->execute();
-                                                        $sentencia->close();
+
+                                                    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['registro'], $_POST['id_usuario'])) {
+
+                                                        $idUsuario = (int) $_POST['id_usuario'];
+                                                        $registro  = $_POST['registro'];
+
+                                                        if (in_array($registro, ['E', 'S'], true)) {
+
+                                                            $stmt = $conexion->prepare("
+            INSERT INTO movimientos (id_usuario, registro)
+            VALUES (?, ?)
+        ");
+                                                            $stmt->bind_param('is', $idUsuario, $registro);
+                                                            $stmt->execute();
+                                                            $stmt->close();
+                                                        }
                                                     }
                                                     ?>
+
 
                                                     <!-- Mostrar entradas y salidas -->
                                                     <?php
