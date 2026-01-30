@@ -1,7 +1,4 @@
 <?php
-// ===============================
-// Inicialización
-// ===============================
 require_once 'conexion.php';
 require_once 'funciones.php';
 require_once 'cabecera.php';
@@ -64,7 +61,19 @@ if (!$esAdmin && $seccion['publico'] == 0) {
     // ===============================
     // Traer usuarios del perfil
     // ===============================
-    $sentencia_usuarios = $conexion->prepare("SELECT id, foto, apellidos, nombres, correo FROM usuarios WHERE id_perfil = ? ORDER BY apellidos, nombres");
+    $sentencia_usuarios = $conexion->prepare("SELECT 
+    u.id,
+    u.foto,
+    u.apellidos,
+    u.nombres,
+    u.correo,
+    u.id_perfil,
+    p.titulo AS perfil
+FROM usuarios u
+LEFT JOIN perfiles p ON u.id_perfil = p.id
+WHERE u.id_perfil = ?
+ORDER BY u.apellidos, u.nombres
+");
     $sentencia_usuarios->bind_param("i", $idSeccion);
     $sentencia_usuarios->execute();
     $usuarios = $sentencia_usuarios->get_result();
@@ -78,17 +87,39 @@ if (!$esAdmin && $seccion['publico'] == 0) {
         <div class="row">
             <?php while ($campo = $usuarios->fetch_assoc()): ?>
                 <div class="col-md-2">
-                    <div class="card">
-                        <picture class="ratio ratio-1x1 rounded overflow-hidden">
-                            <source srcset="/fotos/<?= $campo['foto'] ?>" type="image/webp">
-                            <img src="/fotos/<?= $campo['foto'] ?>" class="img-zoom" alt="Logotipo">
-                        </picture>
-                        <div class="card-body">
-                            <?= htmlspecialchars($campo['apellidos']) ?>
-                            <?= htmlspecialchars($campo['nombres']) ?>
-                            <?= htmlspecialchars($campo['correo']) ?>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#usuario<?= $campo['id'] ?>" data-id="<?= $campo['id'] ?>">
+                        <div class="card h-100">
+                            <picture class="ratio ratio-1x1 rounded overflow-hidden">
+                                <source srcset="/fotos/<?= $campo['foto'] ?>" type="image/webp">
+                                <img src="/fotos/<?= $campo['foto'] ?>" class="img-zoom" alt="Logotipo">
+                            </picture>
+                            <div class="card-body">
+                                <?= htmlspecialchars($campo['apellidos']) ?>, <?= htmlspecialchars($campo['nombres']) ?>
+                                <?= htmlspecialchars($campo['correo']) ?>
+
+                                <div class="modal fade" id="usuario<?= $campo['id'] ?>" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                                        <div class="modal-content">
+
+                                            <div class="modal-header">
+                                                <h5 class="modal-title"><?= htmlspecialchars($campo['apellidos']) ?> , <?= htmlspecialchars($campo['nombres']) ?></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+
+                                            <div class="modal-body">
+                                                <div id="modalContenido">
+                                                    <h3></h3>
+                                                    <?= htmlspecialchars($campo['perfil']) ?? 'Sin perfil asignado' ?>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             <?php endwhile; ?>
         </div>
@@ -104,6 +135,10 @@ if (!$esAdmin && $seccion['publico'] == 0) {
 
 <?php
     endif;
+?>
 
 
-    require_once 'pie.php';
+
+
+
+<?php require_once 'pie.php';
