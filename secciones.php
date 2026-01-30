@@ -108,8 +108,65 @@ ORDER BY u.apellidos, u.nombres
 
                                             <div class="modal-body">
                                                 <div id="modalContenido">
-                                                    <h3></h3>
+
                                                     <?= htmlspecialchars($campo['perfil']) ?? 'Sin perfil asignado' ?>
+
+
+                                                    <form method="POST">
+                                                        <input type="hidden" name="entrada" value="E">
+                                                        <input type="submit" name="E" value="Entrada">
+                                                    </form>
+
+                                                    <form method="POST">
+                                                        <input type="hidden" name="salida" value="S">
+                                                        <input type="submit" name="S" value="Salida">
+                                                    </form>
+
+                                                    <?php
+                                                    if (isset($_POST['E'])) {
+                                                        $entrada = $_POST['entrada'];
+                                                        $sentencia = $conexion->prepare("INSERT INTO movimientos (registro, id_usuario) VALUES (?, ?)");
+                                                        $sentencia->bind_param('si', $entrada, $id_usuario);
+                                                        $sentencia->execute();
+                                                        $sentencia->close();
+                                                    }
+                                                    ?>
+
+                                                    <!-- Mostrar entradas y salidas -->
+                                                    <?php
+                                                    $idUsuario = $campo['id'];
+
+                                                    $consulta = $conexion->prepare("
+                                                        SELECT m.registro, m.agregado
+                                                        FROM movimientos m
+                                                        WHERE m.id_usuario = ?
+                                                        ORDER BY m.agregado DESC
+                                                    ");
+                                                    $consulta->bind_param("i", $idUsuario);
+                                                    $consulta->execute();
+                                                    $resultado = $consulta->get_result();
+                                                    ?>
+                                                    <?php if ($resultado->num_rows > 0): ?>
+                                                        <ul class="list-group">
+                                                            <?php while ($mov = $resultado->fetch_assoc()): ?>
+                                                                <li class="list-group-item d-flex justify-content-between">
+                                                                    <span>
+                                                                        <?= $mov['registro'] === 'E' ? 'Entrada' : 'Salida' ?>
+                                                                    </span>
+                                                                    <small class="text-muted">
+                                                                        <?= date('d/m/Y H:i', strtotime($mov['agregado'])) ?>
+                                                                    </small>
+                                                                </li>
+                                                            <?php endwhile; ?>
+                                                        </ul>
+                                                    <?php else: ?>
+                                                        <p class="text-muted">Sin movimientos registrados</p>
+                                                    <?php endif; ?>
+
+
+
+
+
                                                 </div>
                                             </div>
 
